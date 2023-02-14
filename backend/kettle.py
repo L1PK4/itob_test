@@ -1,4 +1,5 @@
 import asyncio
+import aiohttp
 from enum import Enum
 
 
@@ -36,3 +37,10 @@ class Kettle:
             self._temperature += speed
         self._state = State.BOILED
         return True
+
+    async def send_data(self, url: str, data: dict):
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=data) as response:
+                response_data = await response.json()
+        return response_data
+    
